@@ -1,0 +1,82 @@
+env:
+    MANIFEST: https://github.com/LineageOS/android.git -b lineage-18.1 --git-lfs -g default,-mips,-darwin,-notdefault
+    DEVICE: RMX2020
+    OEM: realme
+    DT_LINK: https://github.com/SatoruGojo2k23/a11_device_realme_RMX2020.git
+    DT_PATH: device/$OEM/$DEVICE
+    VT_LINK: https://github.com/SatoruGojo2k23/a11_vendor_realme_RMX2020.git
+    VT_PATH: vendor/$OEM/$DEVICE
+    KT_LINK: https://github.com/SatoruGojo2k23/a11_kernel_realme_RMX2020.git
+    PLATFORM: mt6768
+    KT_PATH: kernel/$OEM/$DEVICE
+    TARGET: bacon
+    EXTRA_CMD: export SKIP_ABI_CHECKS=true
+    LUNCH_COMBO: lineage_${DEVICE}-userdebug
+    OUTPUT: lineageos*.zip
+
+task:
+  name: "Setting Up, Syncing, Building and Uploading..."
+  timeout_in: 240m  
+  container:
+      image: ghcr.io/satorugojo2k23/docker:arch
+      cpu: 8
+      memory: 32G
+
+  Storage-Checker_script:
+      - df -h
+      - lsblk
+      - ls -l -a -h
+  
+  Sync_script:
+      - echo "============================"
+      - echo "Syncing The Sources..."
+      - echo "============================"
+      - mkdir -p ~/work
+      - cd ~/work
+      - repo init --depth=1 -u $MANIFEST
+      - repo sync -j8 --force-sync --no-tags --no-clone-bundle
+      - git clone --depth=1 $DT_LINK $DT_PATH
+      - git clone --depth=1 $KT_LINK $KT_PATH
+      - git clone --depth=1 $VT_LINK $VT_PATH
+      - git clone --depth=1 https://github.com/Realme-G70-Series/android_packages_apps_RealmeParts -b lineage-18.1 packages/apps/RealmeParts
+      - git clone --depth=1 https://github.com/Realme-G70-Series/android_packages_apps_RealmeDirac -b lineage-18.1 packages/apps/RealmeDirac
+      - echo "============================"
+      - echo "Adding Patches!"
+      - echo "============================"
+      - cd external/selinux && git fetch https://github.com/PixelExperience/external_selinux eleven && git cherry-pick 9d6ebe89430ffe0aeeb156f572b2a810f9dc98cc && cd ../..
+      - cd frameworks/av && git fetch https://github.com/phhusson/platform_frameworks_av android-11.0.0_r48-phh && git cherry-pick f0830faec98e65d4a03dba9b57b0cb2fd178e8f3 && cd ../..
+      - echo "============================"
+      - echo "Syncing Complete!"
+      - echo "============================"
+
+  Build_script:
+      - echo "============================"
+      - echo "Starting the Build..."
+      - echo "============================"
+      - cd ~/work
+      - $EXTRA_CMD
+      - export USE_CCACHE=1
+      - export CCACHE_EXEC=/usr/bin/ccache
+      - ccache -M 50G
+      - . build/envsetup.sh
+      - lunch "$LUNCH_COMBO"
+      - brunch RMX2020
+     
+  Upload_script:
+      - echo "============================"
+      - echo "Uploading the Build..."
+      - echo "============================"
+      - cd ~/work
+      - cd out/target/product/"$DEVICE"
+      - ls -lh
+      - pwd
+      - chmod 777 *
+      - curl --upload-file $(echo $OUTPUT) https://transfer.sh | tee link.txt && echo " "
+      - echo " "
+      - echo "============================"
+      - echo "Build Uploaded!"
+      - echo "Please see the link Below-  "
+      - echo "----------------------------"
+      - cat link.txt && echo " "
+      - echo "============================"
+        
