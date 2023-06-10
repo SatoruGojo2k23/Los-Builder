@@ -1,8 +1,8 @@
 env:
-    MANIFEST: https://github.com/LineageOS/android.git -b lineage-18.1
+    MANIFEST: https://github.com/ResurrectionRemix-Revived/manifest.git -b Q --git-lfs
     DEVICE: RMX2020
     OEM: realme
-    DT_LINK: https://github.com/SatoruGojo2k23/a11_device_realme_RMX2020.git
+    DT_LINK: https://github.com/SatoruGojo2k23/device_realme_RMX2020-A10.git
     DT_PATH: device/$OEM/$DEVICE
     VT_LINK: https://github.com/SatoruGojo2k23/a11_vendor_realme_RMX2020.git
     VT_PATH: vendor/$OEM/$DEVICE
@@ -11,7 +11,7 @@ env:
     KT_PATH: kernel/$OEM/$DEVICE
     TARGET: bacon
     EXTRA_CMD: export SKIP_ABI_CHECKS=true
-    LUNCH_COMBO: lineage_${DEVICE}-userdebug
+    LUNCH_COMBO: rr_${DEVICE}-userdebug
     OUTPUT: lineageos*.zip
 
 task:
@@ -38,13 +38,6 @@ task:
       - git clone --depth=1 $DT_LINK $DT_PATH
       - git clone --depth=1 $KT_LINK $KT_PATH
       - git clone --depth=1 $VT_LINK $VT_PATH
-      - git clone --depth=1 https://github.com/Realme-G70-Series/android_packages_apps_RealmeParts -b lineage-18.1 packages/apps/RealmeParts
-      - git clone --depth=1 https://github.com/Realme-G70-Series/android_packages_apps_RealmeDirac -b lineage-18.1 packages/apps/RealmeDirac
-      - echo "============================"
-      - echo "Adding Patches!"
-      - echo "============================"
-      - cd external/selinux && git fetch https://github.com/PixelExperience/external_selinux eleven && git cherry-pick 9d6ebe89430ffe0aeeb156f572b2a810f9dc98cc && cd ../..
-      - cd frameworks/base && git fetch https://github.com/AOSPA/android_frameworks_base && git cherry-pick 81581a12497e77644a4a0fbe4893b907c27e2bf6 && cd ../..
       - echo "============================"
       - echo "Syncing Complete!"
       - echo "============================"
@@ -57,10 +50,10 @@ task:
       - $EXTRA_CMD
       - export USE_CCACHE=1
       - export CCACHE_EXEC=/usr/bin/ccache
-      - ccache -M 100G
+      - ccache -M 50G
       - . build/envsetup.sh
       - lunch "$LUNCH_COMBO"
-      - mka bacon -j16
+      - make bacon
      
   Upload_script:
       - echo "============================"
