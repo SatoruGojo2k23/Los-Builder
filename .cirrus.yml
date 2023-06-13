@@ -38,6 +38,8 @@ task:
       - git clone --depth=1 $DT_LINK $DT_PATH
       - git clone --depth=1 $KT_LINK $KT_PATH
       - git clone --depth=1 $VT_LINK $VT_PATH
+      - rm -rf system/timezone
+      - git clone --depth=1 https://github.com/LineageOS/android_system_timezone -b lineage-17.1 system/timezone
       - echo "============================"
       - echo "Syncing Complete!"
       - echo "============================"
@@ -50,9 +52,10 @@ task:
       - $EXTRA_CMD
       - export USE_CCACHE=1
       - export CCACHE_EXEC=/usr/bin/ccache
-      - ccache -M 50G
+      - ccache -M 5G
       - . build/envsetup.sh
       - lunch "$LUNCH_COMBO"
+      - export TZ=Asia/Dhaka
       - make corvus
      
   Upload_script:
