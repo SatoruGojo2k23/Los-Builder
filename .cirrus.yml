@@ -1,18 +1,18 @@
 env:
-    MANIFEST: https://github.com/ResurrectionRemix-Revived/manifest.git -b Q --git-lfs
+    MANIFEST: https://github.com/Corvus-Q/android_manifest.git -b 10
     DEVICE: RMX2020
     OEM: realme
-    DT_LINK: https://github.com/SatoruGojo2k23/device_realme_RMX2020-A10.git
+    DT_LINK: https://github.com/SatoruGojo2k23/device_realme_RMX2020-A10.git -b Corvus-Q
     DT_PATH: device/$OEM/$DEVICE
     VT_LINK: https://github.com/SatoruGojo2k23/a11_vendor_realme_RMX2020.git
     VT_PATH: vendor/$OEM/$DEVICE
-    KT_LINK: https://github.com/SatoruGojo2k23/a11_kernel_realme_RMX2020.git
+    KT_LINK: https://github.com/sarthakroy2002/kernel_realme_RMX2020.git -b Q
     PLATFORM: mt6768
     KT_PATH: kernel/$OEM/$DEVICE
     TARGET: bacon
     EXTRA_CMD: export SKIP_ABI_CHECKS=true
-    LUNCH_COMBO: rr_${DEVICE}-userdebug
-    OUTPUT: lineageos*.zip
+    LUNCH_COMBO: du_${DEVICE}-userdebug
+    OUTPUT: corvus*.zip
 
 task:
   name: "Setting Up, Syncing, Building and Uploading..."
@@ -53,7 +53,7 @@ task:
       - ccache -M 50G
       - . build/envsetup.sh
       - lunch "$LUNCH_COMBO"
-      - make bacon
+      - make corvus
      
   Upload_script:
       - echo "============================"
