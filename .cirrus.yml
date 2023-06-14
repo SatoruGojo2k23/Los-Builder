@@ -2,11 +2,11 @@ env:
     MANIFEST: https://github.com/LineageOS/android.git -b lineage-17.1
     DEVICE: RMX2020
     OEM: realme
-    DT_LINK: https://github.com/SatoruGojo2k23/device_realme_RMX2020-A10.git
+    DT_LINK: https://github.com/SatoruGojo2k23/device_realme_RMX2020-A10.git -b Los-A10
     DT_PATH: device/$OEM/$DEVICE
     VT_LINK: https://github.com/SatoruGojo2k23/a11_vendor_realme_RMX2020.git
     VT_PATH: vendor/$OEM/$DEVICE
-    KT_LINK: https://github.com/SatoruGojo2k23/a11_kernel_realme_RMX2020.git
+    KT_LINK: https://github.com/sarthakroy2002/kernel_realme_RMX2020.git -b Q
     PLATFORM: mt6768
     KT_PATH: kernel/$OEM/$DEVICE
     TARGET: bacon
@@ -50,7 +50,7 @@ task:
       - $EXTRA_CMD
       - export USE_CCACHE=1
       - export CCACHE_EXEC=/usr/bin/ccache
-      - ccache -M 50G
+      - ccache -M 100G
       - . build/envsetup.sh
       - lunch "$LUNCH_COMBO"
       - make bacon
