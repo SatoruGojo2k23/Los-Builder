@@ -11,7 +11,7 @@ env:
     KT_PATH: kernel/$OEM/$DEVICE
     TARGET: bacon
     EXTRA_CMD: export SKIP_ABI_CHECKS=true
-    LUNCH_COMBO: du-userdebug
+    LUNCH_COMBO: breakfast RMX2020
     OUTPUT: DirtyUnicorn*.zip
 
 task:
@@ -50,11 +50,11 @@ task:
       - $EXTRA_CMD
       - export USE_CCACHE=1
       - export CCACHE_EXEC=/usr/bin/ccache
-      - ccache -M 5G
+      - ccache -M 50G
       - . build/envsetup.sh
-      - lunch "$LUNCH_COMBO"
+      - breakfast RMX2020
       - export TZ=Asia/Dhaka
-      - make $TARGET
+      - mka bacon
      
   Upload_script:
       - echo "============================"
