@@ -11,8 +11,8 @@ env:
     KT_PATH: kernel/$OEM/$DEVICE
     TARGET: bacon
     EXTRA_CMD: export SKIP_ABI_CHECKS=true
-    LUNCH_COMBO: du_${DEVICE}-userdebug
-    OUTPUT: corvus*.zip
+    LUNCH_COMBO: du-userdebug
+    OUTPUT: DirtyUnicorn*.zip
 
 task:
   name: "Setting Up, Syncing, Building and Uploading..."
@@ -54,7 +54,7 @@ task:
       - . build/envsetup.sh
       - lunch "$LUNCH_COMBO"
       - export TZ=Asia/Dhaka
-      - make bacon
+      - make $TARGET
      
   Upload_script:
       - echo "============================"
